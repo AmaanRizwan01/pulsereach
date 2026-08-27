@@ -1,0 +1,371 @@
+{
+  "name": "Amaan Rizwan",
+  "visaStatus": "Dubai, UAE | UAE Residence Visa Holder | Available Immediately",
+  "phone": "+971-50-000-0000",
+  "email": "you@example.com",
+  "linkedinUrl": "https://www.linkedin.com/in/your-profile/",
+  "githubUrl": "https://github.com/your-username/",
+  "portfolioUrl": "https://your-portfolio.vercel.app/",
+  "defaultHeadline": "Software Engineer | Full-Stack, Backend & Cloud Infrastructure",
+  "defaultSummary": "Results-driven Software Engineer specializing in modern JavaScript/TypeScript frameworks (Next.js, React), backend and database architecture (Node.js, PostgreSQL, Supabase, Redis), and secure Linux server infrastructure. Proven track record of building production web applications, optimizing performance and Core Web Vitals, and delivering measurable business results.",
+  "skills": {
+    "languages": [
+      "JavaScript (ES6+)",
+      "TypeScript",
+      "Python",
+      "PHP",
+      "SQL",
+      "Java",
+      "HTML5",
+      "CSS3"
+    ],
+    "frontend": [
+      "React.js",
+      "Next.js (App Router)",
+      "TypeScript",
+      "Tailwind CSS",
+      "Vite",
+      "GSAP Animations",
+      "Responsive Design",
+      "State Management"
+    ],
+    "backend": [
+      "Node.js",
+      "REST APIs",
+      "Express.js",
+      "FastAPI",
+      "Next.js API Routes",
+      "OOP Architecture",
+      "Shopify Liquid",
+      "WordPress / Elementor Pro",
+      "WooCommerce",
+      "Microservices"
+    ],
+    "cloudDevops": [
+      "Docker",
+      "Proxmox VE",
+      "LXC Containers",
+      "Linux Administration",
+      "Cloudflare Zero Trust",
+      "Tailscale VPN",
+      "CI/CD Workflows",
+      "Nginx Reverse Proxy",
+      "GCP",
+      "Uptime Monitoring"
+    ],
+    "databases": [
+      "PostgreSQL",
+      "Supabase",
+      "MySQL",
+      "MariaDB",
+      "Redis Caching",
+      "Database Modeling & Indexing",
+      "PHP-FPM Tuning",
+      "OPcache & APCu"
+    ],
+    "tools": [
+      "Git / GitHub",
+      "Cron Automation",
+      "Technical SEO",
+      "Google Search Console",
+      "Core Web Vitals Optimization",
+      "Cross-Browser QA",
+      "Postman / API Testing",
+      "BullMQ Queue Processing"
+    ]
+  },
+  "experience": [
+    {
+      "company": "Cronix Solutions - Remote",
+      "role": "Software Engineer Intern | Jun 2026 - Aug 2026",
+      "period": "Jun 2026 - Aug 2026",
+      "domainTags": [
+        "frontend",
+        "shopify",
+        "liquid",
+        "ecommerce",
+        "javascript",
+        "ui_ux",
+        "web_performance",
+        "qa",
+        "responsive"
+      ],
+      "bullets": [
+        "Architected and deployed custom Shopify Liquid storefront architecture with modular section schemas from scratch for client brand Smith's Blades to strict technical specifications.",
+        "Engineered responsive mobile-first UI components with vanilla JavaScript and modern CSS, ensuring pixel-perfect fidelity across all major device viewports.",
+        "Collaborated asynchronously across time zones with a distributed engineering team to execute rigorous cross-browser QA, DOM load profiling, and asset minification.",
+        "Optimized critical rendering path and image delivery pipelines, achieving sub-second time-to-interactive (TTI) and 100% cross-platform audit compliance on schedule."
+      ]
+    },
+    {
+      "company": "Upwork - Remote",
+      "role": "Freelance Software & Web Developer | Aug 2025 - Present",
+      "period": "Aug 2025 - Present",
+      "domainTags": [
+        "fullstack",
+        "ecommerce",
+        "shopify",
+        "wordpress",
+        "seo",
+        "php",
+        "woocommerce",
+        "performance",
+        "redis",
+        "mysql"
+      ],
+      "bullets": [
+        "Engineered bespoke e-commerce solutions and custom themes for international clients, driving a verified 100% Job Success Score across all concurrent contract deliverables.",
+        "Architected custom Shopify Liquid storefront for Lisa Flowers & Balloons (Australia), optimizing the checkout funnel and technical SEO to secure top Google rank and a 7.8% organic CTR.",
+        "Developed full-stack commercial web portal for Transform & Restore Painting (USA) using WordPress and Elementor Pro, generating 348 search impressions and 7.2% CTR in month one.",
+        "Implemented custom WooCommerce backend for Route 21 utilizing PHP, MySQL, and Redis object caching to accelerate complex catalog query execution times by over 60%."
+      ]
+    }
+  ],
+  "projects": {
+    "intralead": {
+      "id": "intralead",
+      "name": "Intralead B2B SaaS Platform",
+      "domainTags": [
+        "fullstack",
+        "saas",
+        "nextjs",
+        "react",
+        "typescript",
+        "supabase",
+        "postgresql",
+        "api",
+        "backend",
+        "auth",
+        "tailwind",
+        "security"
+      ],
+      "technologies": "Next.js App Router, TypeScript, Supabase, PostgreSQL, Dodo Payments, Tailwind CSS, REST APIs",
+      "period": "Jul 2026 - Present",
+      "bullets": [
+        "Architected and deployed a production B2B lead generation SaaS platform leveraging Next.js App Router, TypeScript, and Supabase for relational data persistence and role-based access control.",
+        "Engineered an atomic wallet transaction architecture integrated with Dodo Payments webhooks, eliminating credit allocation race conditions and automating pay-as-you-go billing.",
+        "Designed high-throughput RESTful API endpoints and automated background scrapers with robust error-handling, rate-limiting guards, and structured data validation.",
+        "Implemented strict security policies including PostgreSQL Row-Level Security (RLS), CSP headers, and JWT session handling, achieving sub-second API response latencies."
+      ],
+      "metrics": [
+        "Atomic wallet transaction safety",
+        "Sub-second API response times",
+        "Zero credit race conditions",
+        "PostgreSQL RLS security"
+      ]
+    },
+    "proxmox_infra": {
+      "id": "proxmox_infra",
+      "name": "Self-Hosted Virtualized Cloud Infrastructure",
+      "domainTags": [
+        "devops",
+        "cloud",
+        "linux",
+        "sysadmin",
+        "infrastructure",
+        "docker",
+        "proxmox",
+        "security",
+        "redis",
+        "networking",
+        "backend",
+        "sre"
+      ],
+      "technologies": "Proxmox VE, LXC, Docker, Cloudflare Zero Trust, Tailscale VPN, MariaDB, Redis, PHP-FPM, Linux",
+      "period": "Feb 2026 - Present",
+      "bullets": [
+        "Architected a resilient virtualized homelab and production deployment environment using Proxmox VE, LXC containers, and Docker microservices on Debian Linux.",
+        "Engineered enterprise zero-trust networking via Cloudflare Tunnels and Tailscale mesh VPN, securing remote service endpoints with zero open inbound firewall ports.",
+        "Tuned hardware CPU C-states and power governors on bare-metal host, reducing idle server power consumption by over 75% (from 40W to 7-8W) with zero performance degradation.",
+        "Optimized full-stack application performance by tuning Nginx reverse proxies, PHP-FPM worker pools, and MariaDB buffer pools backed by Redis in-memory caching."
+      ],
+      "metrics": [
+        "75%+ power reduction (40W to 7W)",
+        "0 inbound open ports (Zero Trust)",
+        "Sub-millisecond Redis cache hits",
+        "100% uptime"
+      ]
+    },
+    "transform_paint": {
+      "id": "transform_paint",
+      "name": "Transform and Restore Paint Commercial Portal",
+      "domainTags": [
+        "web",
+        "cms",
+        "wordpress",
+        "seo",
+        "performance",
+        "frontend",
+        "analytics",
+        "ui_ux",
+        "responsive"
+      ],
+      "technologies": "WordPress, Elementor Pro, Technical SEO, Core Web Vitals, Google Search Console, CSS3",
+      "period": "Feb 2026 - Mar 2026",
+      "bullets": [
+        "Spearheaded end-to-end development and deployment of a responsive commercial web portal for a US painting contractor with modern layouts and semantic HTML5 architecture.",
+        "Executed technical on-page SEO architecture and JSON-LD schema markup, capturing 348 search impressions and a 7.2% CTR on Google Search Console in month one.",
+        "Optimized Core Web Vitals, asset bundling, and critical CSS rendering, achieving top mobile performance scores and reducing Largest Contentful Paint (LCP) to under 1.2 seconds.",
+        "Implemented conversion-focused lead capture forms with client-side validation and automated email notifications, driving high-intent customer inquiries."
+      ],
+      "metrics": [
+        "7.2% search CTR",
+        "348 search impressions in month one",
+        "80% US targeted traffic",
+        "LCP under 1.2s"
+      ]
+    },
+    "lisa_flowers": {
+      "id": "lisa_flowers",
+      "name": "Lisa Flowers & Balloons E-Commerce Platform",
+      "domainTags": [
+        "ecommerce",
+        "shopify",
+        "liquid",
+        "frontend",
+        "seo",
+        "javascript",
+        "ui_ux",
+        "conversion"
+      ],
+      "technologies": "Shopify Liquid, Custom Theme Architecture, JavaScript, CSS3, Technical SEO",
+      "period": "Jan 2026 - Feb 2026",
+      "bullets": [
+        "Engineered bespoke Shopify Liquid storefront architecture featuring modular section schemas and reactive AJAX cart logic for an established Australian floral brand.",
+        "Implemented technical on-page SEO and structured rich snippet markup, driving top Google rankings for high-competition regional keywords and a 7.8% organic CTR.",
+        "Streamlined mobile checkout UX and navigation pathways, reducing bounce rates and friction points across high-volume mobile traffic funnels.",
+        "Audited and eliminated redundant third-party scripts to optimize page load speeds, boosting Google PageSpeed Mobile score to 90+."
+      ],
+      "metrics": [
+        "7.8% organic search CTR",
+        "Page 1 Google rank",
+        "Mobile conversion funnel optimization",
+        "90+ Mobile PageSpeed"
+      ]
+    },
+    "smiths_blades": {
+      "id": "smiths_blades",
+      "name": "Smith's Blades Custom E-Commerce Theme",
+      "domainTags": [
+        "ecommerce",
+        "shopify",
+        "liquid",
+        "frontend",
+        "javascript",
+        "responsive",
+        "ui_ux",
+        "modular"
+      ],
+      "technologies": "Shopify Liquid, JavaScript (ES6+), Section Schemas, Responsive CSS3, HTML5",
+      "period": "Jun 2026 - Aug 2026",
+      "bullets": [
+        "Developed a bespoke Shopify theme from the ground up in Liquid, vanilla JavaScript (ES6+), and CSS3 to deliver a modern catalog browsing experience for Smith's Blades.",
+        "Created dynamic JSON section schemas allowing non-technical store managers to easily customize layouts, marketing banners, and seasonal product showcases.",
+        "Implemented client-side collection filtering and dynamic search indexing without external app dependencies, keeping theme bundle overhead minimal.",
+        "Conducted end-to-end cross-browser compatibility testing and responsive UI verification, ensuring smooth 60 FPS interactions across mobile, tablet, and desktop."
+      ],
+      "metrics": [
+        "100% custom theme build",
+        "Full merchant CMS control via schemas",
+        "Cross-browser verified",
+        "Zero third-party script bloat"
+      ]
+    },
+    "route21": {
+      "id": "route21",
+      "name": "Route 21 High-Performance E-Commerce Store",
+      "domainTags": [
+        "backend",
+        "ecommerce",
+        "woocommerce",
+        "php",
+        "mysql",
+        "redis",
+        "caching",
+        "api",
+        "fullstack",
+        "optimization"
+      ],
+      "technologies": "WooCommerce, PHP, JavaScript, MySQL, Redis Object Caching, REST APIs",
+      "period": "Aug 2025 - Oct 2025",
+      "bullets": [
+        "Architected and launched a custom WooCommerce platform utilizing PHP and MySQL, integrating Redis object caching to handle high-frequency product queries with sub-100ms latency.",
+        "Engineered RESTful integrations for multi-currency payment gateways, dynamic shipping calculators, and real-time inventory synchronization with external warehouse APIs.",
+        "Optimized relational database schema and query indexes for large product catalogs, eliminating slow query bottlenecks during peak traffic surges.",
+        "Delivered complete store architecture with zero downtime, maintaining a flawless 100% client satisfaction and Job Success Score on Upwork."
+      ],
+      "metrics": [
+        "100% Job Success Score",
+        "Sub-100ms catalog query latency with Redis",
+        "Zero transaction anomalies",
+        "Zero downtime"
+      ]
+    },
+    "swipetify": {
+      "id": "swipetify",
+      "name": "Swipetify Luxury Lifestyle Platform",
+      "domainTags": [
+        "frontend",
+        "react",
+        "typescript",
+        "vite",
+        "ui_ux",
+        "animation",
+        "tailwind",
+        "performance",
+        "gsap"
+      ],
+      "technologies": "React.js, TypeScript, GSAP, ScrollTrigger, Vite, Tailwind CSS",
+      "period": "Aug 2026",
+      "bullets": [
+        "Architected and built an interactive luxury lifestyle curation web application utilizing React.js, TypeScript, Vite, and Tailwind CSS.",
+        "Engineered fluid 60 FPS scroll-driven animations and custom card-swipe gesture mechanics using GSAP and ScrollTrigger for a tactile user experience.",
+        "Structured modular atomic UI component architecture with strict TypeScript type-safety, ensuring rapid feature scalability and zero runtime regressions.",
+        "Optimized asset loading, layout reflows, and DOM repaint cycles to achieve sub-second initial paint times and flawless responsive performance across all viewports."
+      ],
+      "metrics": [
+        "60 FPS smooth animations",
+        "Sub-second initial paint",
+        "100% mobile responsive",
+        "Strict TypeScript type safety"
+      ]
+    }
+  },
+  "education": [
+    {
+      "institution": "Sir Syed University of Engineering & Technology (SSUET)",
+      "location": "Karachi, Pakistan",
+      "degree": "BS, Software Engineering",
+      "period": "Oct 2021 - Jul 2025",
+      "grade": "3.55 / 4.0"
+    },
+    {
+      "institution": "Aptech Pakistan",
+      "location": "Karachi, Pakistan",
+      "degree": "Advanced Diploma, Software Engineering",
+      "period": "Aug 2018 - Oct 2021"
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Python",
+      "issuer": "Kaggle"
+    },
+    {
+      "name": "Introduction to Programming",
+      "issuer": "Kaggle"
+    },
+    {
+      "name": "JavaScript Essentials 2",
+      "issuer": "Cisco"
+    },
+    {
+      "name": "JavaScript Essentials 1",
+      "issuer": "Cisco"
+    },
+    {
+      "name": "HTML/CSS Fundamentals",
+      "issuer": "Template Monster"
+    }
+  ]
+}

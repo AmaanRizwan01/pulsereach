@@ -1,0 +1,82 @@
+name: Pulsereach Dashboard Generator
+
+on:
+  workflow_dispatch:
+    inputs:
+      job_id:
+        description: 'Unique dashboard job identifier (e.g. dash-1724601016)'
+        required: true
+        type: string
+      job_title:
+        description: 'Target job title'
+        required: true
+        type: string
+      company_name:
+        description: 'Target company name'
+        required: true
+        type: string
+      job_description:
+        description: 'Full job description text'
+        required: true
+        type: string
+
+concurrency:
+  group: dashboard-generate
+  cancel-in-progress: false
+
+jobs:
+  generate:
+    name: Generate CV, Cover Letter & Outreach Email
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Install Playwright Headless Chromium & System Dependencies
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run Dashboard Generation Worker
+        env:
+          INPUT_JOB_ID: ${{ inputs.job_id }}
+          INPUT_JOB_TITLE: ${{ inputs.job_title }}
+          INPUT_COMPANY_NAME: ${{ inputs.company_name }}
+          INPUT_JOB_DESCRIPTION: ${{ inputs.job_description }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AI_MODEL: ${{ secrets.AI_MODEL || 'gemini-2.0-flash' }}
+          AI_MATCHING_MODEL: ${{ secrets.AI_MATCHING_MODEL || 'gemini-2.0-flash' }}
+          AI_TAILORING_MODEL: ${{ secrets.AI_TAILORING_MODEL || 'gemini-2.0-flash' }}
+          AI_CLASSIFIER_MODEL: ${{ secrets.AI_CLASSIFIER_MODEL || 'gemini-2.0-flash' }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID || secrets.GMAIL_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET || secrets.GMAIL_CLIENT_SECRET }}
+          GMAIL_CLIENT_ID: ${{ secrets.GMAIL_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}
+          GMAIL_CLIENT_SECRET: ${{ secrets.GMAIL_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_STORAGE_REFRESH_TOKEN: ${{ secrets.GOOGLE_STORAGE_REFRESH_TOKEN || secrets.GMAIL_REFRESH_TOKEN }}
+          GOOGLE_SPREADSHEET_ID: ${{ secrets.GOOGLE_SPREADSHEET_ID || secrets.GOOGLE_SHEET_ID }}
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID || secrets.GOOGLE_SPREADSHEET_ID }}
+          GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
+          GMAIL_SENDER_EMAIL: ${{ secrets.GMAIL_SENDER_EMAIL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NODE_ENV: production
+        run: pnpm tsx src/dashboard/generate-worker.ts

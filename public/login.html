@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulsereach | Cockpit Security Gate</title>
+  <meta name="description" content="Secure authentication gate for Pulsereach Cockpit.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --bg-pitch: #09090b;
+      --surface-card: #121214;
+      --surface-input: #09090b;
+      --border-crisp: #222225;
+      --border-focus: #c5a880;
+      --text-ivory: #f5f5f7;
+      --text-slate: #8e8e93;
+      --text-muted: #52525b;
+      --gold-primary: #c5a880;
+      --gold-hover: #d4af37;
+      --emerald-solid: #10b981;
+      --emerald-bg: #0c281e;
+      --amber-solid: #f59e0b;
+      --amber-bg: #2b1f0c;
+      --crimson-solid: #ef4444;
+      --crimson-bg: #291212;
+      --radius-sharp: 4px;
+      --radius-card: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-pitch);
+      color: var(--text-ivory);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .login-container {
+      max-width: 440px;
+      width: 100%;
+    }
+
+    .card {
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-crisp);
+      border-radius: var(--radius-card);
+      padding: 36px 32px;
+    }
+
+    .header-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--emerald-bg);
+      border: 1px solid var(--emerald-solid);
+      color: var(--emerald-solid);
+      padding: 5px 12px;
+      border-radius: var(--radius-sharp);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 20px;
+    }
+
+    .header-badge .dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--emerald-solid);
+      border-radius: 50%;
+    }
+
+    .kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--gold-primary);
+      margin-bottom: 6px;
+    }
+
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-ivory);
+      margin-bottom: 8px;
+    }
+
+    p.subtitle {
+      color: var(--text-slate);
+      font-size: 13.5px;
+      margin-bottom: 24px;
+      line-height: 1.5;
+    }
+
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-slate);
+      margin-bottom: 6px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 12px 14px;
+      background-color: var(--surface-input);
+      border: 1px solid var(--border-crisp);
+      border-radius: var(--radius-sharp);
+      color: var(--text-ivory);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .form-input:focus {
+      border-color: var(--border-focus);
+    }
+
+    .form-input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px 20px;
+      background-color: var(--gold-primary);
+      color: var(--bg-pitch);
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      border: 1px solid var(--gold-primary);
+      border-radius: var(--radius-sharp);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.15s, border-color 0.15s;
+      margin-top: 10px;
+    }
+
+    .btn-login:hover:not(:disabled) {
+      background-color: var(--gold-hover);
+      border-color: var(--gold-hover);
+    }
+
+    .btn-login:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .error-banner {
+      display: none;
+      background-color: var(--crimson-bg);
+      border: 1px solid var(--crimson-solid);
+      color: #f87171;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 10px 14px;
+      border-radius: var(--radius-sharp);
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    .error-banner.active {
+      display: block;
+    }
+
+    .rate-limit-banner {
+      display: none;
+      background-color: var(--amber-bg);
+      border: 1px solid var(--amber-solid);
+      color: #fbbf24;
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 10px 14px;
+      border-radius: var(--radius-sharp);
+      margin-bottom: 18px;
+      line-height: 1.4;
+    }
+
+    .rate-limit-banner.active {
+      display: block;
+    }
+
+    .footer {
+      text-align: center;
+      margin-top: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .footer a {
+      color: var(--gold-primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+
+<div class="login-container">
+  <div class="card">
+    <div class="header-badge">
+      <div class="dot"></div>
+      Pulsereach Security Gate
+    </div>
+    
+    <div class="kicker">Restricted Cockpit Access</div>
+    <h1>Cockpit Sign In</h1>
+    <p class="subtitle">Enter your credentials to access the autonomous outreach and tailoring dashboard.</p>
+
+    <div class="error-banner" id="errorBanner"></div>
+    <div class="rate-limit-banner" id="rateLimitBanner"></div>
+
+    <form id="loginForm" onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label" for="email">Email Address</label>
+        <input type="email" class="form-input" id="email" placeholder="Enter your registered email" required autocomplete="email">
+      </div>
+
+      <div class="form-group">
+        <label class="form-label" for="password">Password</label>
+        <input type="password" class="form-input" id="password" placeholder="••••••••••••" required autocomplete="current-password">
+      </div>
+
+      <button type="submit" class="btn-login" id="btnLogin">
+        <span>Sign In to Cockpit →</span>
+      </button>
+    </form>
+  </div>
+
+  <div class="footer">
+    <a href="/">← Return to Pulsereach Engine</a>
+  </div>
+</div>
+
+<script>
+  // Supabase Configuration
+  const SUPABASE_URL = 'https://auzypzjttocrurwforfo.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1enlwemp0dG9jcnVyd2ZvcmZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5MTU0MzQsImV4cCI6MjEwMjQ5MTQzNH0.9vTMQUqJatYdOctcVAuQAs6L_PUaggiyp6AfHqn9OLU';
+
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  // Rate Limiting Policy (Brute-force protection)
+  const MAX_FAILED_ATTEMPTS = 5;
+  const COOLDOWN_SECONDS = 60;
+  let cooldownTimer = null;
+
+  // Auto-redirect if session exists
+  async function checkSession() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (session) {
+      window.location.href = '/dashboard';
+    }
+  }
+  checkSession();
+
+  // Check rate limit status from localStorage
+  function checkRateLimit() {
+    const lockUntil = localStorage.getItem('login_lock_until');
+    if (lockUntil && Date.now() < parseInt(lockUntil, 10)) {
+      const remainingSeconds = Math.ceil((parseInt(lockUntil, 10) - Date.now()) / 1000);
+      startCooldown(remainingSeconds);
+      return true;
+    }
+    return false;
+  }
+  checkRateLimit();
+
+  function recordFailedAttempt() {
+    let attempts = parseInt(localStorage.getItem('login_failed_attempts') || '0', 10) + 1;
+    localStorage.setItem('login_failed_attempts', attempts.toString());
+
+    if (attempts >= MAX_FAILED_ATTEMPTS) {
+      const lockUntil = Date.now() + (COOLDOWN_SECONDS * 1000);
+      localStorage.setItem('login_lock_until', lockUntil.toString());
+      localStorage.setItem('login_failed_attempts', '0');
+      startCooldown(COOLDOWN_SECONDS);
+    }
+  }
+
+  function resetFailedAttempts() {
+    localStorage.removeItem('login_failed_attempts');
+    localStorage.removeItem('login_lock_until');
+  }
+
+  function startCooldown(seconds) {
+    const banner = document.getElementById('rateLimitBanner');
+    const btn = document.getElementById('btnLogin');
+    const errorBanner = document.getElementById('errorBanner');
+    errorBanner.classList.remove('active');
+
+    btn.disabled = true;
+    banner.classList.add('active');
+
+    let remaining = seconds;
+    banner.textContent = `Too many failed attempts. Cooldown active: ${remaining}s remaining.`;
+
+    if (cooldownTimer) clearInterval(cooldownTimer);
+    cooldownTimer = setInterval(() => {
+      remaining--;
+      if (remaining <= 0) {
+        clearInterval(cooldownTimer);
+        btn.disabled = false;
+        banner.classList.remove('active');
+        localStorage.removeItem('login_lock_until');
+      } else {
+        banner.textContent = `Too many failed attempts. Cooldown active: ${remaining}s remaining.`;
+      }
+    }, 1000);
+  }
+
+  async function handleLogin(event) {
+    event.preventDefault();
+    if (checkRateLimit()) return;
+
+    const email = document.getElementById('email').value.trim();
+    const password = document.getElementById('password').value;
+    const btn = document.getElementById('btnLogin');
+    const errorBanner = document.getElementById('errorBanner');
+
+    errorBanner.classList.remove('active');
+    btn.disabled = true;
+    btn.innerHTML = '<span>Verifying Credentials...</span>';
+
+    try {
+      const { data, error } = await supabaseClient.auth.signInWithPassword({
+        email,
+        password,
+      });
+
+      if (error) {
+        recordFailedAttempt();
+        throw error;
+      }
+
+      resetFailedAttempts();
+      btn.innerHTML = '<span>Access Granted. Redirecting...</span>';
+      setTimeout(() => {
+        window.location.href = '/dashboard';
+      }, 400);
+    } catch (err) {
+      btn.disabled = false;
+      btn.innerHTML = '<span>Sign In to Cockpit →</span>';
+      errorBanner.textContent = err.message || 'Invalid email or password.';
+      errorBanner.classList.add('active');
+    }
+  }
+</script>
+</body>
+</html>

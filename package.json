@@ -1,0 +1,59 @@
+{
+  "name": "pulsereach",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Autonomous, human-in-the-loop job outreach and application cockpit with $0/month operational budget",
+  "main": "dist/index.js",
+  "author": "Amaan Rizwan",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AmaanRizwan01/pulsereach.git"
+  },
+  "scripts": {
+    "profile:seed": "tsx src/profile/seed-profile.ts",
+    "dashboard:local": "tsx src/dashboard/generate-worker.ts",
+    "build": "echo 'Build complete'",
+    "start": "node dist/index.js",
+    "auth:storage": "tsx src/scripts/auth_helper.ts --mode=storage",
+    "auth:outreach": "tsx src/scripts/auth_helper.ts --mode=outreach",
+    "auth:refresh": "tsx src/scripts/auth_helper.ts",
+    "pulse": "tsx src/worker/pipeline.ts",
+    "pulse:next": "tsx src/worker/pipeline.ts --single",
+    "daemon": "tsx src/worker/daemon.ts",
+    "bot:listen": "tsx src/telegram/poll-service.ts",
+    "set-webhook": "tsx src/telegram/set-webhook.ts",
+    "webhook:info": "tsx src/telegram/set-webhook.ts --info",
+    "test:sheets": "tsx src/sheets/sheets-test.ts",
+    "test:live-sheets": "tsx src/sheets/test-live.ts",
+    "test:candidate": "tsx src/ai/candidate-test.ts",
+    "test:ai": "tsx src/ai/ai-test.ts",
+    "test:resume": "tsx src/ai/resume-test.ts",
+    "test:cover-letter": "tsx src/ai/cover-letter-test.ts",
+    "test:email": "tsx src/ai/email-test.ts",
+    "test:pdf": "tsx src/ai/pdf-test.ts",
+    "test:gmail": "tsx src/gmail/draft-test.ts",
+    "test:deliverability": "tsx src/anti-spam/deliverability-test.ts",
+    "test:telegram": "tsx src/telegram/telegram-test.ts",
+    "test:drive": "tsx src/drive/drive-test.ts",
+    "test:state": "tsx src/worker/state-tracker.test.ts",
+    "test:e2e": "tsx src/e2e-test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.7",
+    "googleapis": "^144.0.0",
+    "playwright": "^1.50.1",
+    "zod": "^3.24.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.4",
+    "@vercel/node": "^5.10.2",
+    "tsx": "^4.19.3",
+    "typescript": "^5.7.3"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "private": false
+}

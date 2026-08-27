@@ -1,0 +1,1074 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulsereach | Executive Tailoring Cockpit</title>
+  <meta name="description" content="Generate ATS-optimized CVs, cover letters, and outreach emails tailored to any job description.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    :root {
+      --bg-pitch: #09090b;
+      --surface-card: #121214;
+      --surface-item: #18181b;
+      --surface-hover: #202024;
+      --surface-input: #09090b;
+      --border-crisp: #222225;
+      --border-subtle: #1c1c1f;
+      --border-focus: #c5a880;
+      --text-ivory: #f5f5f7;
+      --text-slate: #8e8e93;
+      --text-muted: #52525b;
+      --gold-primary: #c5a880;
+      --gold-hover: #d4af37;
+      --gold-dark: #2a2216;
+      --emerald-solid: #10b981;
+      --emerald-bg: #0c281e;
+      --amber-solid: #f59e0b;
+      --amber-bg: #2b1f0c;
+      --crimson-solid: #ef4444;
+      --crimson-bg: #291212;
+      --radius-sharp: 4px;
+      --radius-card: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-pitch);
+      color: var(--text-ivory);
+      min-height: 100vh;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .container {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 32px 20px 80px;
+    }
+
+    /* Top Navigation Bar */
+    .top-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 20px;
+      margin-bottom: 32px;
+      border-bottom: 1px solid var(--border-crisp);
+    }
+
+    .nav-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .brand-title {
+      font-size: 15px;
+      font-weight: 800;
+      letter-spacing: -0.01em;
+      color: var(--text-ivory);
+    }
+
+    .brand-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background-color: var(--emerald-bg);
+      border: 1px solid var(--emerald-solid);
+      color: var(--emerald-solid);
+      padding: 3px 8px;
+      border-radius: var(--radius-sharp);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .brand-dot {
+      width: 5px;
+      height: 5px;
+      background-color: var(--emerald-solid);
+      border-radius: 50%;
+    }
+
+    .user-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .user-pill {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-slate);
+      background-color: var(--surface-item);
+      padding: 6px 12px;
+      border-radius: var(--radius-sharp);
+      border: 1px solid var(--border-crisp);
+    }
+
+    .btn-signout {
+      background-color: var(--surface-item);
+      border: 1px solid var(--border-crisp);
+      color: var(--text-slate);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: var(--radius-sharp);
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      transition: background-color 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .btn-signout:hover {
+      background-color: var(--crimson-bg);
+      border-color: var(--crimson-solid);
+      color: #f87171;
+    }
+
+    /* Hero Header */
+    .header {
+      margin-bottom: 32px;
+    }
+
+    .header-kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--gold-primary);
+      margin-bottom: 6px;
+    }
+
+    .header h1 {
+      font-size: 30px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-ivory);
+      margin-bottom: 8px;
+    }
+
+    .header p {
+      color: var(--text-slate);
+      font-size: 14.5px;
+      max-width: 680px;
+    }
+
+    /* Cards */
+    .card {
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-crisp);
+      border-radius: var(--radius-card);
+      padding: 28px;
+      margin-bottom: 20px;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .card-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-ivory);
+    }
+
+    .card-status {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--gold-primary);
+      padding: 3px 8px;
+      border: 1px solid var(--gold-primary);
+      border-radius: var(--radius-sharp);
+    }
+
+    /* Form */
+    .form-group {
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-slate);
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-textarea {
+      width: 100%;
+      padding: 12px 14px;
+      background-color: var(--surface-input);
+      border: 1px solid var(--border-crisp);
+      border-radius: var(--radius-sharp);
+      color: var(--text-ivory);
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+
+    .form-input:focus, .form-textarea:focus {
+      border-color: var(--border-focus);
+    }
+
+    .form-textarea {
+      min-height: 180px;
+      resize: vertical;
+      line-height: 1.6;
+    }
+
+    .form-input::placeholder, .form-textarea::placeholder {
+      color: var(--text-muted);
+    }
+
+    /* Buttons */
+    .btn-generate {
+      width: 100%;
+      padding: 16px 24px;
+      background-color: var(--gold-primary);
+      color: var(--bg-pitch);
+      font-size: 14px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      border: 1px solid var(--gold-primary);
+      border-radius: var(--radius-sharp);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: background-color 0.15s, border-color 0.15s;
+      margin-top: 8px;
+    }
+
+    .btn-generate:hover:not(:disabled) {
+      background-color: var(--gold-hover);
+      border-color: var(--gold-hover);
+    }
+
+    .btn-generate:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    /* Progress */
+    .progress-section {
+      display: none;
+      text-align: center;
+      padding: 48px 24px;
+    }
+
+    .progress-section.active {
+      display: block;
+    }
+
+    .progress-spinner {
+      width: 44px;
+      height: 44px;
+      border: 2px solid var(--border-crisp);
+      border-top-color: var(--gold-primary);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .progress-text {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-ivory);
+      margin-bottom: 6px;
+    }
+
+    .progress-sub {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--text-slate);
+    }
+
+    .progress-timer {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--gold-primary);
+      margin-top: 16px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    /* Results */
+    .results-section {
+      display: none;
+    }
+
+    .results-section.active {
+      display: block;
+    }
+
+    /* ATS Score Layout */
+    .ats-grid {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 640px) {
+      .ats-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .ats-dial-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      background-color: var(--surface-item);
+      border: 1px solid var(--border-crisp);
+      border-radius: var(--radius-sharp);
+    }
+
+    .ats-ring-wrap {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      margin-bottom: 12px;
+    }
+
+    .ats-ring-wrap svg {
+      width: 120px;
+      height: 120px;
+      transform: rotate(-90deg);
+    }
+
+    .ats-ring-bg {
+      fill: none;
+      stroke: var(--border-crisp);
+      stroke-width: 8;
+    }
+
+    .ats-ring-fg {
+      fill: none;
+      stroke-width: 8;
+      stroke-linecap: square;
+      transition: stroke-dashoffset 1.2s ease-out, stroke 0.3s;
+    }
+
+    .ats-score-number {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -55%);
+      font-size: 32px;
+      font-weight: 800;
+      color: var(--text-ivory);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .ats-score-label {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, 55%);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      color: var(--text-slate);
+      font-weight: 600;
+    }
+
+    .ats-grade {
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .ats-probability {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--text-slate);
+      font-weight: 500;
+    }
+
+    /* ATS Breakdown */
+    .ats-breakdown {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    .ats-metric {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .ats-metric:last-of-type {
+      border-bottom: none;
+      margin-bottom: 12px;
+    }
+
+    .ats-metric-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-slate);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .ats-metric-value {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-ivory);
+    }
+
+    /* Keyword Chips */
+    .keyword-group {
+      margin-top: 14px;
+    }
+
+    .keyword-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-slate);
+      margin-bottom: 8px;
+    }
+
+    .chips-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .chip {
+      padding: 4px 10px;
+      border-radius: var(--radius-sharp);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+    }
+
+    .chip-emerald {
+      background-color: var(--emerald-bg);
+      color: var(--emerald-solid);
+      border: 1px solid var(--emerald-solid);
+    }
+
+    .chip-crimson {
+      background-color: var(--crimson-bg);
+      color: #f87171;
+      border: 1px solid var(--crimson-solid);
+    }
+
+    /* Recommendations */
+    .reco-list {
+      margin-top: 14px;
+      padding-top: 10px;
+      border-top: 1px solid var(--border-subtle);
+    }
+
+    .reco-item {
+      font-size: 13px;
+      color: var(--text-slate);
+      padding: 5px 0 5px 16px;
+      position: relative;
+      line-height: 1.5;
+    }
+
+    .reco-item::before {
+      content: '>';
+      position: absolute;
+      left: 0;
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--gold-primary);
+      font-weight: 700;
+    }
+
+    /* Outreach Email */
+    .email-card {
+      position: relative;
+    }
+
+    .email-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 12px;
+      margin-bottom: 14px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .email-subject {
+      font-size: 13.5px;
+      font-weight: 700;
+      color: var(--text-ivory);
+    }
+
+    .btn-copy {
+      padding: 6px 14px;
+      background-color: var(--surface-item);
+      border: 1px solid var(--border-crisp);
+      color: var(--gold-primary);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: var(--radius-sharp);
+      cursor: pointer;
+      transition: background-color 0.15s, border-color 0.15s, color 0.15s;
+    }
+
+    .btn-copy:hover {
+      background-color: var(--gold-dark);
+      border-color: var(--gold-primary);
+    }
+
+    .btn-copy.copied {
+      background-color: var(--emerald-bg);
+      border-color: var(--emerald-solid);
+      color: var(--emerald-solid);
+    }
+
+    .email-body {
+      background-color: var(--surface-input);
+      border: 1px solid var(--border-crisp);
+      border-radius: var(--radius-sharp);
+      padding: 16px;
+      font-size: 13.5px;
+      color: var(--text-ivory);
+      white-space: pre-wrap;
+      line-height: 1.7;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Downloads */
+    .download-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 520px) {
+      .download-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .btn-download {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 15px 20px;
+      background-color: var(--text-ivory);
+      color: var(--bg-pitch);
+      border: 1px solid var(--text-ivory);
+      border-radius: var(--radius-sharp);
+      font-size: 13.5px;
+      font-weight: 700;
+      font-family: 'Inter', sans-serif;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      transition: background-color 0.15s, border-color 0.15s;
+    }
+
+    .btn-download:hover {
+      background-color: #e2e2e4;
+      border-color: #e2e2e4;
+    }
+
+    .gen-summary {
+      text-align: center;
+      padding-top: 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-slate);
+    }
+
+    /* Secondary Action Button */
+    .btn-secondary {
+      background-color: transparent;
+      border: 1px solid var(--border-crisp);
+      color: var(--text-ivory);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      padding: 12px 28px;
+      border-radius: var(--radius-sharp);
+      cursor: pointer;
+      transition: background-color 0.15s, border-color 0.15s;
+    }
+
+    .btn-secondary:hover {
+      background-color: var(--surface-hover);
+      border-color: var(--text-slate);
+    }
+
+    /* Error Section */
+    .error-card {
+      background-color: var(--crimson-bg);
+      border: 1px solid var(--crimson-solid);
+      border-radius: var(--radius-card);
+      padding: 24px;
+      text-align: center;
+    }
+
+    .error-card .error-msg {
+      color: #f87171;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .btn-retry {
+      padding: 10px 22px;
+      background-color: var(--crimson-solid);
+      border: 1px solid var(--crimson-solid);
+      color: var(--bg-pitch);
+      font-family: 'Inter', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      border-radius: var(--radius-sharp);
+      cursor: pointer;
+    }
+
+    .btn-retry:hover {
+      background-color: #dc2626;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Top Navigation -->
+  <nav class="top-nav">
+    <a href="/" class="nav-brand">
+      <span class="brand-title">PULSEREACH</span>
+      <span class="brand-badge">
+        <span class="brand-dot"></span>
+        Cockpit Live
+      </span>
+    </a>
+    <div class="user-actions">
+      <span class="user-pill" id="userEmailBadge">Loading...</span>
+      <button class="btn-signout" onclick="handleSignOut()">Sign Out</button>
+    </div>
+  </nav>
+
+  <!-- Hero Header -->
+  <header class="header">
+    <div class="header-kicker">On-Demand Application Suite</div>
+    <h1>Executive Tailoring Cockpit</h1>
+    <p>Tailor your ATS-optimized CV, 4-paragraph cover letter, and direct recruiter outreach email anchored to verified candidate profile truth.</p>
+  </header>
+
+  <!-- Input Form -->
+  <div class="card" id="formCard">
+    <div class="card-header">
+      <span class="card-title">Target Opportunity Parameters</span>
+      <span class="card-status">Ready</span>
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label" for="jobTitle">Job Title</label>
+      <input type="text" class="form-input" id="jobTitle" placeholder="e.g. Senior Frontend Engineer / Solutions Architect" maxlength="200" autocomplete="off">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label" for="companyName">Company Name</label>
+      <input type="text" class="form-input" id="companyName" placeholder="e.g. Careem, Noon, Emirates, TechCorp" maxlength="200" autocomplete="off">
+    </div>
+    
+    <div class="form-group">
+      <label class="form-label" for="jobDescription">Job Description</label>
+      <textarea class="form-textarea" id="jobDescription" placeholder="Paste full job description here (minimum 50 characters)..."></textarea>
+    </div>
+    
+    <button class="btn-generate" id="btnGenerate" onclick="startGeneration()">
+      <span>Generate Tailored Application Package →</span>
+    </button>
+  </div>
+
+  <!-- Live Progress Tracker -->
+  <div class="card progress-section" id="progressSection">
+    <div class="progress-spinner"></div>
+    <div class="progress-text" id="progressText">Dispatching to generation engine...</div>
+    <div class="progress-sub">Typical execution takes 60 to 90 seconds</div>
+    <div class="progress-timer" id="progressTimer">0s</div>
+  </div>
+
+  <!-- Error Card -->
+  <div class="card" id="errorSection" style="display:none;">
+    <div class="error-card">
+      <div class="error-msg" id="errorMsg">Something went wrong during generation.</div>
+      <button class="btn-retry" onclick="resetForm()">Try Again</button>
+    </div>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section" id="resultsSection">
+    <!-- ATS Score & Analysis -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">ATS Score & Match Analysis</span>
+        <span class="card-status" id="atsStatusBadge">Evaluated</span>
+      </div>
+
+      <div class="ats-grid">
+        <div class="ats-dial-card">
+          <div class="ats-ring-wrap">
+            <svg viewBox="0 0 120 120">
+              <circle class="ats-ring-bg" cx="60" cy="60" r="50"/>
+              <circle class="ats-ring-fg" id="atsRing" cx="60" cy="60" r="50"
+                stroke-dasharray="314.16" stroke-dashoffset="314.16" stroke="#c5a880"/>
+            </svg>
+            <div class="ats-score-number" id="atsScoreNum">0</div>
+            <div class="ats-score-label">/ 100</div>
+          </div>
+          <div class="ats-grade" id="atsGrade">Grade</div>
+          <div class="ats-probability" id="atsProbability">Pass Probability</div>
+        </div>
+
+        <div class="ats-breakdown">
+          <div class="ats-metric">
+            <span class="ats-metric-label">Keyword Match Rate</span>
+            <span class="ats-metric-value" id="keywordRate">0%</span>
+          </div>
+          <div class="ats-metric">
+            <span class="ats-metric-label">Bullet Impact Score</span>
+            <span class="ats-metric-value" id="bulletScore">0/100</span>
+          </div>
+          <div class="ats-metric">
+            <span class="ats-metric-label">Summary Fit</span>
+            <span class="ats-metric-value" id="summaryFit" style="font-size:12px;font-weight:500;text-align:right;max-width:280px;">Analysis</span>
+          </div>
+
+          <div class="keyword-group">
+            <div class="keyword-title">Matched Keywords</div>
+            <div class="chips-container" id="matchedChips"></div>
+          </div>
+
+          <div class="keyword-group">
+            <div class="keyword-title">Missing Keywords</div>
+            <div class="chips-container" id="missingChips"></div>
+          </div>
+
+          <div class="reco-list" id="recoList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Outreach Email -->
+    <div class="card email-card">
+      <div class="email-toolbar">
+        <div class="email-subject" id="emailSubject">Subject: Direct Inquiry</div>
+        <button class="btn-copy" id="btnCopy" onclick="copyEmail()">Copy Email</button>
+      </div>
+      <div class="email-body" id="emailBody">Email contents...</div>
+    </div>
+
+    <!-- Document Downloads -->
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Compiled A4 PDF Documents</span>
+        <span class="card-status">Ready for Dispatch</span>
+      </div>
+
+      <div class="download-grid">
+        <a class="btn-download" id="dlResume" href="#" target="_blank" rel="noopener">
+          Download CV (PDF)
+        </a>
+        <a class="btn-download" id="dlCoverLetter" href="#" target="_blank" rel="noopener">
+          Download Cover Letter (PDF)
+        </a>
+      </div>
+
+      <div class="gen-summary" id="genSummary"></div>
+    </div>
+
+    <!-- Generate Another -->
+    <div style="text-align:center; margin-top: 24px;">
+      <button class="btn-secondary" onclick="resetForm()">
+        + Tailor Another Opportunity
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Supabase Auth Configuration
+  const SUPABASE_URL = 'https://auzypzjttocrurwforfo.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImF1enlwemp0dG9jcnVyd2ZvcmZvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODY5MTU0MzQsImV4cCI6MjEwMjQ5MTQzNH0.9vTMQUqJatYdOctcVAuQAs6L_PUaggiyp6AfHqn9OLU';
+
+  const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  let currentUserSession = null;
+
+  // Strict Auth Guard: Redirect to /login if not authenticated
+  async function checkAuth() {
+    const { data: { session } } = await supabaseClient.auth.getSession();
+    if (!session) {
+      window.location.href = '/login';
+      return;
+    }
+    currentUserSession = session;
+    const badge = document.getElementById('userEmailBadge');
+    if (badge && session.user && session.user.email) {
+      badge.textContent = session.user.email;
+    }
+  }
+  checkAuth();
+
+  // Listen for auth state changes
+  supabaseClient.auth.onAuthStateChange((event, session) => {
+    if (event === 'SIGNED_OUT' || !session) {
+      window.location.href = '/login';
+    } else {
+      currentUserSession = session;
+    }
+  });
+
+  async function handleSignOut() {
+    await supabaseClient.auth.signOut();
+    window.location.href = '/login';
+  }
+
+  const API_BASE = window.location.origin;
+  let pollInterval = null;
+  let timerInterval = null;
+  let startTime = 0;
+
+  async function startGeneration() {
+    const jobTitle = document.getElementById('jobTitle').value.trim();
+    const companyName = document.getElementById('companyName').value.trim();
+    const jobDescription = document.getElementById('jobDescription').value.trim();
+
+    // Validation
+    if (!jobTitle) return showError('Please enter a job title.');
+    if (!companyName) return showError('Please enter a company name.');
+    if (jobDescription.length < 50) return showError('Job description must be at least 50 characters.');
+
+    if (!currentUserSession || !currentUserSession.access_token) {
+      showError('Session expired. Please sign in again.');
+      setTimeout(() => { window.location.href = '/login'; }, 1500);
+      return;
+    }
+
+    // Show progress
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('progressSection').classList.add('active');
+    document.getElementById('errorSection').style.display = 'none';
+    document.getElementById('resultsSection').classList.remove('active');
+    document.getElementById('btnGenerate').disabled = true;
+
+    startTime = Date.now();
+    timerInterval = setInterval(updateTimer, 1000);
+    updateTimer();
+
+    try {
+      updateProgress('Dispatching to generation engine...');
+      const triggerRes = await fetch(`${API_BASE}/api/dashboard/trigger`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${currentUserSession.access_token}`,
+        },
+        body: JSON.stringify({ jobTitle, companyName, jobDescription }),
+      });
+
+      const triggerData = await triggerRes.json();
+
+      if (!triggerRes.ok) {
+        throw new Error(triggerData.error || `Trigger failed (${triggerRes.status})`);
+      }
+
+      const jobId = triggerData.jobId;
+      updateProgress('Generation workflow started. Waiting for results...');
+
+      pollInterval = setInterval(() => pollStatus(jobId), 5000);
+      setTimeout(() => pollStatus(jobId), 8000);
+    } catch (err) {
+      showError(err.message);
+    }
+  }
+
+  async function pollStatus(jobId) {
+    try {
+      const elapsed = Math.floor((Date.now() - startTime) / 1000);
+      if (elapsed < 30) {
+        updateProgress('GitHub Actions runner starting up...');
+      } else if (elapsed < 50) {
+        updateProgress('Installing dependencies and Playwright...');
+      } else if (elapsed < 70) {
+        updateProgress('Tailoring resume via Gemini AI...');
+      } else if (elapsed < 85) {
+        updateProgress('Generating cover letter and outreach email...');
+      } else if (elapsed < 100) {
+        updateProgress('Compiling PDFs and uploading to Drive...');
+      } else {
+        updateProgress('Finalizing application results...');
+      }
+
+      const statusRes = await fetch(`${API_BASE}/api/dashboard/status?id=${jobId}`);
+      const data = await statusRes.json();
+
+      if (data.status === 'COMPLETE') {
+        clearInterval(pollInterval);
+        clearInterval(timerInterval);
+        renderResults(data);
+      } else if (data.status === 'FAILED') {
+        clearInterval(pollInterval);
+        clearInterval(timerInterval);
+        showError(data.error || 'Generation failed. Please try again.');
+      }
+    } catch {
+      // Keep polling on transient network drops
+    }
+  }
+
+  function updateProgress(text) {
+    document.getElementById('progressText').textContent = text;
+  }
+
+  function updateTimer() {
+    const elapsed = Math.floor((Date.now() - startTime) / 1000);
+    document.getElementById('progressTimer').textContent = `${elapsed}s`;
+  }
+
+  function renderResults(data) {
+    document.getElementById('progressSection').classList.remove('active');
+    document.getElementById('resultsSection').classList.add('active');
+
+    // ATS Score Ring calculation (radius 50 -> circumference 2 * PI * 50 = 314.16)
+    const score = data.atsScore || 0;
+    const circumference = 314.16;
+    const offset = circumference - (circumference * score / 100);
+    const ring = document.getElementById('atsRing');
+    const scoreColor = score >= 85 ? 'var(--emerald-solid)' : score >= 75 ? 'var(--amber-solid)' : 'var(--crimson-solid)';
+    ring.style.stroke = scoreColor;
+    
+    setTimeout(() => { ring.style.strokeDashoffset = offset; }, 100);
+
+    document.getElementById('atsScoreNum').textContent = score;
+    const gradeEl = document.getElementById('atsGrade');
+    gradeEl.textContent = data.atsGrade || 'Evaluated';
+    gradeEl.style.color = scoreColor;
+    document.getElementById('atsProbability').textContent = data.atsPassProbability || 'Calculated';
+
+    // Breakdown
+    document.getElementById('keywordRate').textContent = `${data.keywordMatchRate || 0}%`;
+    document.getElementById('bulletScore').textContent = `${data.bulletImpactScore || 0}/100`;
+    document.getElementById('summaryFit').textContent = data.summaryFitAnalysis || 'Candidate alignment verified';
+
+    // Keyword chips
+    const matchedEl = document.getElementById('matchedChips');
+    const missingEl = document.getElementById('missingChips');
+    matchedEl.innerHTML = (data.matchedKeywords || []).map(k => `<span class="chip chip-emerald">${escHtml(k)}</span>`).join('');
+    missingEl.innerHTML = (data.missingKeywords || []).map(k => `<span class="chip chip-crimson">${escHtml(k)}</span>`).join('');
+
+    // Recommendations
+    const recoEl = document.getElementById('recoList');
+    recoEl.innerHTML = (data.recommendations || []).map(r => `<div class="reco-item">${escHtml(r)}</div>`).join('');
+
+    // Email
+    document.getElementById('emailSubject').textContent = `Subject: ${data.emailSubject || 'Inquiry'}`;
+    document.getElementById('emailBody').textContent = data.emailBody || '';
+
+    // Downloads (Google Drive links)
+    const dlResume = document.getElementById('dlResume');
+    const dlCL = document.getElementById('dlCoverLetter');
+    dlResume.href = data.resumeDriveUrl || '#';
+    dlCL.href = data.coverLetterDriveUrl || '#';
+
+    // Summary
+    const genTime = data.generationTimeMs ? (data.generationTimeMs / 1000).toFixed(1) : '0.0';
+    document.getElementById('genSummary').textContent =
+      `Generated in ${genTime}s | ${data.projectCount || 3} Projects | CL: ${data.coverLetterWordCount || '300'} words | Email: ${data.emailWordCount || '150'} words`;
+  }
+
+  function copyEmail() {
+    const subject = document.getElementById('emailSubject').textContent.replace('Subject: ', '');
+    const body = document.getElementById('emailBody').textContent;
+    const full = `Subject: ${subject}\n\n${body}`;
+    navigator.clipboard.writeText(full).then(() => {
+      const btn = document.getElementById('btnCopy');
+      btn.textContent = 'Copied to Clipboard';
+      btn.classList.add('copied');
+      setTimeout(() => {
+        btn.textContent = 'Copy Email';
+        btn.classList.remove('copied');
+      }, 2000);
+    });
+  }
+
+  function showError(msg) {
+    clearInterval(pollInterval);
+    clearInterval(timerInterval);
+    document.getElementById('progressSection').classList.remove('active');
+    document.getElementById('errorSection').style.display = 'block';
+    document.getElementById('errorMsg').textContent = msg;
+    document.getElementById('btnGenerate').disabled = false;
+  }
+
+  function resetForm() {
+    clearInterval(pollInterval);
+    clearInterval(timerInterval);
+    document.getElementById('formCard').style.display = 'block';
+    document.getElementById('progressSection').classList.remove('active');
+    document.getElementById('errorSection').style.display = 'none';
+    document.getElementById('resultsSection').classList.remove('active');
+    document.getElementById('btnGenerate').disabled = false;
+  }
+
+  function escHtml(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+</script>
+</body>
+</html>

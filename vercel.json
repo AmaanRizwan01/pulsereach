@@ -1,0 +1,40 @@
+{
+  "version": 2,
+  "outputDirectory": "public",
+  "functions": {
+    "api/**/*.ts": {
+      "memory": 1024,
+      "maxDuration": 60
+    }
+  },
+  "routes": [
+    {
+      "src": "/api/telegram",
+      "dest": "/api/telegram.ts"
+    },
+    {
+      "src": "/api/trigger",
+      "dest": "/api/trigger.ts"
+    },
+    {
+      "src": "/api/dashboard/trigger",
+      "dest": "/api/dashboard/trigger.ts"
+    },
+    {
+      "src": "/api/dashboard/status",
+      "dest": "/api/dashboard/status.ts"
+    },
+    {
+      "src": "/login",
+      "dest": "/login.html"
+    },
+    {
+      "src": "/dashboard",
+      "dest": "/dashboard.html"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/$1"
+    }
+  ]
+}

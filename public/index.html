@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pulsereach Engine | Executive Outreach Cockpit</title>
+  <meta name="description" content="Autonomous human-in-the-loop job outreach and tailoring platform targeting the UAE engineering market.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-pitch: #09090b;
+      --surface-card: #121214;
+      --surface-item: #18181b;
+      --surface-hover: #202024;
+      --border-crisp: #222225;
+      --border-subtle: #1c1c1f;
+      --border-gold: #c5a880;
+      --text-ivory: #f5f5f7;
+      --text-slate: #8e8e93;
+      --text-muted: #52525b;
+      --gold-primary: #c5a880;
+      --gold-hover: #d4af37;
+      --emerald-solid: #10b981;
+      --emerald-bg: #0c281e;
+      --radius-sharp: 4px;
+      --radius-card: 6px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-pitch);
+      color: var(--text-ivory);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px 20px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .cockpit-container {
+      max-width: 600px;
+      width: 100%;
+    }
+
+    .cockpit-card {
+      background-color: var(--surface-card);
+      border: 1px solid var(--border-crisp);
+      border-radius: var(--radius-card);
+      padding: 40px;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background-color: var(--emerald-bg);
+      border: 1px solid var(--emerald-solid);
+      color: var(--emerald-solid);
+      padding: 6px 14px;
+      border-radius: var(--radius-sharp);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 24px;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      background-color: var(--emerald-solid);
+      border-radius: 50%;
+    }
+
+    .kicker {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--gold-primary);
+      margin-bottom: 8px;
+    }
+
+    h1 {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      color: var(--text-ivory);
+      margin-bottom: 12px;
+    }
+
+    p.description {
+      color: var(--text-slate);
+      font-size: 14.5px;
+      line-height: 1.6;
+      margin-bottom: 32px;
+    }
+
+    .section-title {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .status-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    @media (max-width: 480px) {
+      .status-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .status-item {
+      background-color: var(--surface-item);
+      border: 1px solid var(--border-crisp);
+      border-radius: var(--radius-sharp);
+      padding: 14px 16px;
+    }
+
+    .status-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10.5px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-slate);
+      margin-bottom: 4px;
+    }
+
+    .status-value {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-ivory);
+    }
+
+    .cta-card {
+      margin-top: 8px;
+      margin-bottom: 28px;
+    }
+
+    .cta-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: var(--gold-primary);
+      border: 1px solid var(--gold-primary);
+      border-radius: var(--radius-sharp);
+      padding: 16px 20px;
+      color: var(--bg-pitch);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      transition: background-color 0.15s, border-color 0.15s;
+    }
+
+    .cta-link:hover {
+      background-color: var(--gold-hover);
+      border-color: var(--gold-hover);
+    }
+
+    .cta-arrow {
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .footer {
+      border-top: 1px solid var(--border-crisp);
+      padding-top: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11.5px;
+      color: var(--text-slate);
+    }
+
+    .footer a {
+      color: var(--gold-primary);
+      text-decoration: none;
+      font-weight: 600;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="cockpit-container">
+    <div class="cockpit-card">
+      <div class="status-badge">
+        <div class="status-dot"></div>
+        Serverless Webhooks Live
+      </div>
+      
+      <div class="kicker">Autonomous Outreach Infrastructure</div>
+      <h1>Pulsereach Engine</h1>
+      <p class="description">High-precision UAE engineering outreach engine with real-time candidate truth-anchoring, ATS auto-tailoring, and zero hallucination invariants.</p>
+      
+      <div class="section-title">Operational Architecture</div>
+      <div class="status-grid">
+        <div class="status-item">
+          <div class="status-label">Telegram Endpoint</div>
+          <div class="status-value">/api/telegram</div>
+        </div>
+        <div class="status-item">
+          <div class="status-label">Sheets Trigger</div>
+          <div class="status-value">/api/trigger</div>
+        </div>
+        <div class="status-item">
+          <div class="status-label">Budget Efficiency</div>
+          <div class="status-value">$0.00 / month</div>
+        </div>
+        <div class="status-item">
+          <div class="status-label">Candidate Truth</div>
+          <div class="status-value">100% Anchored</div>
+        </div>
+      </div>
+
+      <div class="cta-card">
+        <a href="/dashboard" class="cta-link">
+          <span>Launch Executive Tailoring Cockpit</span>
+          <span class="cta-arrow">→</span>
+        </a>
+      </div>
+
+      <div class="footer">
+        <span>Mode: 24/7 Continuous</span>
+        <a href="/dashboard">Open Dashboard →</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

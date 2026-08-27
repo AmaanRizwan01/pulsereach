@@ -1,0 +1,126 @@
+name: Pulsereach Autonomous Job Engine
+
+on:
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 'Run in dry-run mode (no Gmail drafts, Drive uploads, or Telegram dispatches)'
+        required: false
+        type: boolean
+        default: false
+      force:
+        description: 'Force process next lead bypassing pending review lock'
+        required: false
+        type: boolean
+        default: false
+      target_row:
+        description: 'Target specific Google Sheet row number'
+        required: false
+        type: string
+        default: ''
+
+concurrency:
+  group: pulse-pipeline
+  cancel-in-progress: false
+
+jobs:
+  run-pipeline:
+    name: Execute Pulsereach Batch Pipeline
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Setup Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install Dependencies
+        run: pnpm install
+
+      - name: Install Playwright Headless Chromium & System Dependencies
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Verify Environment Secrets Configuration
+        run: |
+          echo "🔍 Checking presence of required GitHub Secrets..."
+          MISSING=0
+          check_secret() {
+            if [ -z "$2" ]; then
+              echo "❌ Missing GitHub Secret: $1"
+              MISSING=1
+            else
+              echo "✅ Configured: $1"
+            fi
+          }
+          check_secret "GEMINI_API_KEY" "${{ secrets.GEMINI_API_KEY }}"
+          check_secret "GOOGLE_CLIENT_ID / GMAIL_CLIENT_ID" "${{ secrets.GOOGLE_CLIENT_ID || secrets.GMAIL_CLIENT_ID }}"
+          check_secret "GOOGLE_CLIENT_SECRET / GMAIL_CLIENT_SECRET" "${{ secrets.GOOGLE_CLIENT_SECRET || secrets.GMAIL_CLIENT_SECRET }}"
+          check_secret "GMAIL_REFRESH_TOKEN" "${{ secrets.GMAIL_REFRESH_TOKEN }}"
+          check_secret "GOOGLE_SPREADSHEET_ID" "${{ secrets.GOOGLE_SPREADSHEET_ID || secrets.GOOGLE_SHEET_ID }}"
+          check_secret "TELEGRAM_BOT_TOKEN" "${{ secrets.TELEGRAM_BOT_TOKEN }}"
+          check_secret "TELEGRAM_CHAT_ID" "${{ secrets.TELEGRAM_CHAT_ID }}"
+          
+          if [ "$MISSING" -eq 1 ]; then
+            echo ""
+            echo "💥 Fatal: One or more required secrets are missing from GitHub Repository Settings."
+            echo "👉 Please go to https://github.com/${{ github.repository }}/settings/secrets/actions and add the missing repository secrets."
+            exit 1
+          fi
+          echo "✨ All required environment secrets are configured!"
+
+      - name: Execute Pulsereach Autonomous JIT Pipeline
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          AI_MODEL: ${{ secrets.AI_MODEL || 'gemini-2.0-flash' }}
+          AI_MATCHING_MODEL: ${{ secrets.AI_MATCHING_MODEL || 'gemini-2.0-flash' }}
+          AI_TAILORING_MODEL: ${{ secrets.AI_TAILORING_MODEL || 'gemini-2.0-flash' }}
+          AI_CLASSIFIER_MODEL: ${{ secrets.AI_CLASSIFIER_MODEL || 'gemini-2.0-flash' }}
+          GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID || secrets.GMAIL_CLIENT_ID }}
+          GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET || secrets.GMAIL_CLIENT_SECRET }}
+          GMAIL_CLIENT_ID: ${{ secrets.GMAIL_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}
+          GMAIL_CLIENT_SECRET: ${{ secrets.GMAIL_CLIENT_SECRET || secrets.GOOGLE_CLIENT_SECRET }}
+          GOOGLE_STORAGE_REFRESH_TOKEN: ${{ secrets.GOOGLE_STORAGE_REFRESH_TOKEN || secrets.GMAIL_REFRESH_TOKEN }}
+          GOOGLE_SPREADSHEET_ID: ${{ secrets.GOOGLE_SPREADSHEET_ID || secrets.GOOGLE_SHEET_ID }}
+          GOOGLE_SHEET_ID: ${{ secrets.GOOGLE_SHEET_ID || secrets.GOOGLE_SPREADSHEET_ID }}
+          GMAIL_REFRESH_TOKEN: ${{ secrets.GMAIL_REFRESH_TOKEN }}
+          GMAIL_SENDER_EMAIL: ${{ secrets.GMAIL_SENDER_EMAIL }}
+          TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+          WEBHOOK_SECRET: ${{ secrets.WEBHOOK_SECRET }}
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+          NODE_ENV: production
+        run: |
+          ROW_ARG=""
+          if [ -n "${{ inputs.target_row }}" ]; then
+            ROW_ARG="--row=${{ inputs.target_row }}"
+          fi
+
+          if [ "${{ inputs.dry_run }}" = "true" ]; then
+            pnpm tsx src/index.ts --single --dry-run $ROW_ARG
+          elif [ "${{ inputs.force }}" = "true" ]; then
+            pnpm tsx src/index.ts --single --force $ROW_ARG
+          else
+            pnpm tsx src/index.ts --single $ROW_ARG
+          fi
+
+      - name: Commit & Persist Deduplication State (state.json)
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'chore(state): persist state.json deduplication tracker [skip ci]'
+          file_pattern: 'state.json'
+
