@@ -498,7 +498,7 @@ pulsereach/
 ### 5.6 Gmail MIME & Multi-Recipient Drafting Service
 
 #### [`src/gmail/draft-service.ts`](file:///c:/Coding/JobSearch/src/gmail/draft-service.ts)
-- **Role:** Creates and sends Gmail drafts on Account 2 (`amaanrizwan2016@gmail.com`).
+- **Role:** Creates and sends Gmail drafts on Outreach Account.
 - **Features:** Builds RFC 2822 `multipart/mixed` MIME messages with UTF-8 base64 subjects and attached single-page A4 PDFs.
 - **Resilient Sender (`sendDraftForJob`):** Attempts send by `draftId`; if missing or expired, searches recent mailbox drafts for matching recipients and subjects to ensure delivery.
 - **Key Functions:**
@@ -712,7 +712,7 @@ If the ATS score returned is `< 85`, [`src/ai/resume-tailorer.ts`](file:///c:/Co
 ### RFC 2822 Multipart/Mixed MIME Builder Structure
 
 ```
-From: Amaan Rizwan <amaanrizwan2016@gmail.com>
+From: Candidate Name <you@example.com>
 To: recipient@company.ae
 Subject: =?UTF-8?B?...?=
 MIME-Version: 1.0
