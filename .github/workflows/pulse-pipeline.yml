@@ -85,10 +85,10 @@ jobs:
       - name: Execute Pulsereach Autonomous JIT Pipeline
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          AI_MODEL: ${{ secrets.AI_MODEL || 'gemini-3.6-flash' }}
-          AI_MATCHING_MODEL: ${{ secrets.AI_MATCHING_MODEL || 'gemini-3.6-flash' }}
-          AI_TAILORING_MODEL: ${{ secrets.AI_TAILORING_MODEL || 'gemini-3.6-flash' }}
-          AI_CLASSIFIER_MODEL: ${{ secrets.AI_CLASSIFIER_MODEL || 'gemini-3.6-flash' }}
+          AI_MODEL: ${{ secrets.AI_MODEL || 'gemini-3.5-flash' }}
+          AI_MATCHING_MODEL: ${{ secrets.AI_MATCHING_MODEL || 'gemini-3.5-flash' }}
+          AI_TAILORING_MODEL: ${{ secrets.AI_TAILORING_MODEL || 'gemini-3.5-flash' }}
+          AI_CLASSIFIER_MODEL: ${{ secrets.AI_CLASSIFIER_MODEL || 'gemini-3.5-flash' }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID || secrets.GMAIL_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET || secrets.GMAIL_CLIENT_SECRET }}
           GMAIL_CLIENT_ID: ${{ secrets.GMAIL_CLIENT_ID || secrets.GOOGLE_CLIENT_ID }}

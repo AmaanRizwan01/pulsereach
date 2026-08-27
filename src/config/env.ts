@@ -61,10 +61,10 @@ export const envSchema = z.object({
   GEMINI_API_KEY: z
     .string({ required_error: 'GEMINI_API_KEY is required' })
     .min(1, 'GEMINI_API_KEY cannot be empty'),
-  AI_MODEL: z.string().default('gemini-3.6-flash'),
-  AI_MATCHING_MODEL: z.string().default('gemini-3.6-flash'),
-  AI_TAILORING_MODEL: z.string().default('gemini-3.6-flash'),
-  AI_CLASSIFIER_MODEL: z.string().default('gemini-3.6-flash'),
+  AI_MODEL: z.string().default('gemini-3.5-flash'),
+  AI_MATCHING_MODEL: z.string().default('gemini-3.5-flash'),
+  AI_TAILORING_MODEL: z.string().default('gemini-3.5-flash'),
+  AI_CLASSIFIER_MODEL: z.string().default('gemini-3.5-flash'),
 
   // Telegram Cockpit
   TELEGRAM_BOT_TOKEN: z

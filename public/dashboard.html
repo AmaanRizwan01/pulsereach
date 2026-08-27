@@ -499,6 +499,12 @@
       border: 1px solid var(--crimson-solid);
     }
 
+    .chip-gold {
+      background-color: var(--gold-glow);
+      color: var(--gold-primary);
+      border: 1px solid var(--gold-border);
+    }
+
     /* Recommendations */
     .reco-list {
       margin-top: 14px;
@@ -756,7 +762,10 @@
     <div class="card">
       <div class="card-header">
         <span class="card-title">ATS Score & Match Analysis</span>
-        <span class="card-status" id="atsStatusBadge">Evaluated</span>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span class="chip chip-gold" id="modelUsedChip" style="display:none;font-size:11px;">Gemini 3.5 Flash</span>
+          <span class="card-status" id="atsStatusBadge">Evaluated</span>
+        </div>
       </div>
 
       <div class="ats-grid">
@@ -1024,10 +1033,18 @@
     dlResume.href = data.resumeDriveUrl || '#';
     dlCL.href = data.coverLetterDriveUrl || '#';
 
+    // Model Badge
+    const modelChip = document.getElementById('modelUsedChip');
+    if (data.modelDisplay || data.modelUsed) {
+      modelChip.textContent = `✨ ${data.modelDisplay || data.modelUsed}`;
+      modelChip.style.display = 'inline-flex';
+    }
+
     // Summary
     const genTime = data.generationTimeMs ? (data.generationTimeMs / 1000).toFixed(1) : '0.0';
+    const modelName = data.modelDisplay || data.modelUsed || 'Gemini AI';
     document.getElementById('genSummary').textContent =
-      `Generated in ${genTime}s | ${data.projectCount || 3} Projects | CL: ${data.coverLetterWordCount || '300'} words | Email: ${data.emailWordCount || '150'} words`;
+      `Generated in ${genTime}s via ${modelName} | ${data.projectCount || 3} Projects | CL: ${data.coverLetterWordCount || '300'} words | Email: ${data.emailWordCount || '150'} words`;
   }
 
   function copyEmail() {

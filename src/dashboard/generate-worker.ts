@@ -9,6 +9,7 @@ import { generateTailoredResumeData } from '../ai/resume-tailorer.js';
 import { generateTailoredCoverLetter } from '../ai/cover-letter-generator.js';
 import { generateTailoredOutreachEmail } from '../ai/email-generator.js';
 import { compileResumePdf, compileCoverLetterPdf } from '../ai/pdf-compiler.js';
+import { getLastUsedModel } from '../ai/index.js';
 import {
   archiveApplicationPdfs,
   getOrCreateApplicationsRootFolder,
@@ -217,11 +218,24 @@ async function runDashboardGeneration(): Promise<void> {
     const elapsed = Date.now() - startTime;
     console.log('\n6️⃣  [Dashboard] Uploading results metadata to Google Drive...');
 
+    const modelUsed = getLastUsedModel();
+    const modelDisplayMap: Record<string, string> = {
+      'gemini-3.5-flash': 'Gemini 3.5 Flash',
+      'gemini-3.1-flash-lite': 'Gemini 3.1 Flash Lite',
+      'gemini-3-flash-preview': 'Gemini 3 Flash Preview',
+      'gemini-3.6-flash': 'Gemini 3.6 Flash',
+      'gemini-3.7-flash': 'Gemini 3.7 Flash',
+      'gemini-3.5-flash-lite': 'Gemini 3.5 Flash Lite',
+    };
+    const modelDisplay = modelDisplayMap[modelUsed] || modelUsed;
+
     const results = {
       status: 'COMPLETE',
       jobId,
       jobTitle,
       companyName,
+      modelUsed,
+      modelDisplay,
       // ATS Score & Breakdown
       atsScore: tailoredResume.atsResult.overallAtsScore,
       atsGrade: tailoredResume.atsResult.ratingGrade,
@@ -250,6 +264,7 @@ async function runDashboardGeneration(): Promise<void> {
     await uploadResultsJsonToDrive(jobId, results);
 
     console.log(`\n🎉 [Dashboard Worker] Generation complete in ${(elapsed / 1000).toFixed(1)}s!`);
+    console.log(`   AI Engine: ${modelDisplay} (${modelUsed})`);
     console.log(`   ATS Score: ${atsScore}/100 (${tailoredResume.atsResult.ratingGrade})`);
     console.log(`   Resume: ${driveUrls.resumeDriveUrl}`);
     console.log(`   Cover Letter: ${driveUrls.coverLetterDriveUrl || 'N/A'}`);
