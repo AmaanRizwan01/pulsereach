@@ -28,23 +28,33 @@ const ENV_HELP_GUIDE: Record<string, string> = {
 };
 
 /**
+ * Helper to normalize empty strings or whitespace-only strings into undefined.
+ * This prevents empty environment variables passed from CI/CD secrets from failing URL/Email validators.
+ */
+const emptyToUndefined = (val: unknown) =>
+  typeof val === 'string' && val.trim() === '' ? undefined : val;
+
+/**
  * Zod schema for all required and optional runtime environment variables.
  */
 export const envSchema = z.object({
   // Google Sheets & Storage Account
-  GOOGLE_SHEET_ID: z.string().optional(),
-  GOOGLE_SPREADSHEET_ID: z.string().optional(),
-  GOOGLE_STORAGE_USER_EMAIL: z.string().email().optional(),
-  GOOGLE_STORAGE_REFRESH_TOKEN: z.string().optional(),
+  GOOGLE_SHEET_ID: z.preprocess(emptyToUndefined, z.string().optional()),
+  GOOGLE_SPREADSHEET_ID: z.preprocess(emptyToUndefined, z.string().optional()),
+  GOOGLE_STORAGE_USER_EMAIL: z.preprocess(emptyToUndefined, z.string().email().optional()),
+  GOOGLE_STORAGE_REFRESH_TOKEN: z.preprocess(emptyToUndefined, z.string().optional()),
 
   // Google OAuth2 Shared Client Credentials
-  GOOGLE_CLIENT_ID: z.string().optional(),
-  GOOGLE_CLIENT_SECRET: z.string().optional(),
-  GMAIL_CLIENT_ID: z.string().optional(),
-  GMAIL_CLIENT_SECRET: z.string().optional(),
+  GOOGLE_CLIENT_ID: z.preprocess(emptyToUndefined, z.string().optional()),
+  GOOGLE_CLIENT_SECRET: z.preprocess(emptyToUndefined, z.string().optional()),
+  GMAIL_CLIENT_ID: z.preprocess(emptyToUndefined, z.string().optional()),
+  GMAIL_CLIENT_SECRET: z.preprocess(emptyToUndefined, z.string().optional()),
 
   // Candidate Gmail Outreach Account
-  GMAIL_SENDER_EMAIL: z.string().email({ message: 'GMAIL_SENDER_EMAIL must be a valid email address' }).default('you@example.com'),
+  GMAIL_SENDER_EMAIL: z.preprocess(
+    emptyToUndefined,
+    z.string().email({ message: 'GMAIL_SENDER_EMAIL must be a valid email address' }).default('you@example.com')
+  ),
   GMAIL_REFRESH_TOKEN: z.string({ required_error: 'GMAIL_REFRESH_TOKEN is required' }).min(1),
 
   // Google Gemini AI
@@ -68,16 +78,16 @@ export const envSchema = z.object({
   WEBHOOK_SECRET: z
     .string({ required_error: 'WEBHOOK_SECRET is required' })
     .min(8, 'WEBHOOK_SECRET must be at least 8 characters long'),
-  GITHUB_TOKEN: z.string().optional(),
-  GITHUB_OWNER: z.string().optional(),
-  GITHUB_REPO: z.string().default('pulsereach'),
+  GITHUB_TOKEN: z.preprocess(emptyToUndefined, z.string().optional()),
+  GITHUB_OWNER: z.preprocess(emptyToUndefined, z.string().optional()),
+  GITHUB_REPO: z.preprocess(emptyToUndefined, z.string().default('pulsereach')),
 
   // Managed Supabase (Profile & State Store)
-  NEXT_PUBLIC_SUPABASE_URL: z.string().url().optional(),
-  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string().optional(),
-  SUPABASE_SERVICE_ROLE_KEY: z.string().optional(),
-  SUPABASE_PROJECT_REF: z.string().optional(),
-  SUPABASE_PUBLISHABLE_KEY: z.string().optional(),
+  NEXT_PUBLIC_SUPABASE_URL: z.preprocess(emptyToUndefined, z.string().url().optional()),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: z.preprocess(emptyToUndefined, z.string().optional()),
+  SUPABASE_SERVICE_ROLE_KEY: z.preprocess(emptyToUndefined, z.string().optional()),
+  SUPABASE_PROJECT_REF: z.preprocess(emptyToUndefined, z.string().optional()),
+  SUPABASE_PUBLISHABLE_KEY: z.preprocess(emptyToUndefined, z.string().optional()),
 
   // Fallback Cron & Runtime Environment
   CRON_SCHEDULE: z.string().default('0 */2 * * *'),
