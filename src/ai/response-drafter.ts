@@ -4,7 +4,7 @@
  */
 
 import { generateStructuredJson, sanitizeEmDashes } from './index.js';
-import { getCachedProfile } from '../profile/profile-loader.js';
+import { getProfile, getCachedProfile } from '../profile/profile-loader.js';
 import { RecruiterIntent } from './conversation-classifier.js';
 import { sanitizeSalutation } from './email-generator.js';
 
@@ -31,7 +31,7 @@ export interface RecruiterReplyResult {
 export async function draftRecruiterReply(
   options: DraftReplyOptions
 ): Promise<RecruiterReplyResult> {
-  const profile = getCachedProfile();
+  const profile = await getProfile();
   const {
     incomingEmailBody,
     incomingEmailSubject,

@@ -32,6 +32,7 @@ import {
 import { getRemainingDailyBudget } from '../anti-spam/deliverability-shield.js'; // Used only in batch pipeline
 import { filterDeliverableEmails } from '../anti-spam/email-verifier.js';
 import { generateDocumentFileName } from '../utils/file-naming.js';
+import { getProfile } from '../profile/profile-loader.js';
 
 export interface PipelineExecutionOptions {
   /** Maximum number of jobs to process in this run (defaults to remaining daily budget or 5) */
@@ -174,6 +175,9 @@ export function sortJobsByPriority(jobs: SheetJobRow[]): SheetJobRow[] {
 export async function processSingleJobJustInTime(
   options: { dryRun?: boolean; force?: boolean; targetRowNumber?: number } = {}
 ): Promise<JitProcessResult> {
+  // Pre-fetch live candidate profile
+  await getProfile();
+
   // 1. Fetch fresh rows from Google Sheets
   console.log(`📥 [JIT Queue] Fetching live Google Sheet leads...`);
   const allRows = await fetchLatestJobsFromSheet();
@@ -449,6 +453,7 @@ export async function runJobBatchPipeline(
   options: PipelineExecutionOptions = {}
 ): Promise<PipelineSummary> {
   const startTime = new Date().toISOString();
+  await getProfile();
   console.log(`\n🚀 [Pipeline] Starting Pulsereach Master Batch Pipeline at ${startTime}...`);
 
   const remainingBudget = getRemainingDailyBudget();

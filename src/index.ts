@@ -5,6 +5,7 @@
  */
 
 import { getEnv } from './config/env.js';
+import { getProfile } from './profile/profile-loader.js';
 import { processSingleJobJustInTime, runJobBatchPipeline } from './worker/pipeline.js';
 import { startManualCockpit } from './worker/daemon.js';
 
@@ -13,7 +14,9 @@ export async function main(): Promise<void> {
 
   try {
     const env = getEnv();
-    console.log('✅ Configuration loaded and validated successfully.');
+    const profile = await getProfile();
+    console.log('✅ Configuration and candidate profile loaded successfully.');
+    console.log(`• Active Candidate: ${profile.name} (${profile.email || env.GMAIL_SENDER_EMAIL})`);
     console.log(`• Outreach Sender: ${env.GMAIL_SENDER_EMAIL}`);
     console.log(`• SpreadSheet ID: ${env.GOOGLE_SPREADSHEET_ID}`);
     console.log(`• Telegram Chat: ${env.TELEGRAM_CHAT_ID}`);

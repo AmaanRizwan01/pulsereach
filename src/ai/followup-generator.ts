@@ -4,7 +4,7 @@
  */
 
 import { generateStructuredJson, sanitizeEmDashes } from './index.js';
-import { getCachedProfile } from '../profile/profile-loader.js';
+import { getProfile, getCachedProfile } from '../profile/profile-loader.js';
 import { buildFollowUpPrompt } from '../prompts/index.js';
 import { sanitizeSalutation } from './email-generator.js';
 
@@ -31,7 +31,7 @@ export interface FollowUpEmailResult {
 export async function generateFollowUpEmail(
   options: GenerateFollowUpOptions
 ): Promise<FollowUpEmailResult> {
-  const profile = getCachedProfile();
+  const profile = await getProfile();
   const { jobTitle, companyName, originalSubject, sequenceType, recruiterName, contactType } = options;
 
   const salutation = sanitizeSalutation(recruiterName, companyName, contactType);

@@ -4,7 +4,7 @@
  */
 
 import { generateStructuredJson, sanitizeEmDashes } from './index.js';
-import { getCachedProfile } from '../profile/profile-loader.js';
+import { getProfile, getCachedProfile } from '../profile/profile-loader.js';
 import { VerifiedProject, VerifiedEducation } from '../profile/types.js';
 
 export interface GenerateCoverLetterOptions {
@@ -146,7 +146,7 @@ ${data.bodyParagraphs.map((p) => `<p>${p}</p>`).join('\n')}
 export async function generateCoverLetter(
   options: GenerateCoverLetterOptions
 ): Promise<CoverLetterResult> {
-  const profile = getCachedProfile();
+  const profile = await getProfile();
   const candidateName = options.candidateName || profile.name;
   const candidateLocation = options.candidateLocation || profile.visaStatus;
   const candidateEmail = options.candidateEmail || profile.email;

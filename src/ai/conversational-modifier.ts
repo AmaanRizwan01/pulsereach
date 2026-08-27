@@ -4,7 +4,7 @@
  */
 
 import { generateStructuredJson, sanitizeEmDashes } from './index.js';
-import { getCachedProfile } from '../profile/profile-loader.js';
+import { getProfile, getCachedProfile } from '../profile/profile-loader.js';
 
 export interface ModifyArtifactOptions {
   artifactType: 'resume_summary' | 'resume_bullets' | 'cover_letter' | 'outreach_email';
@@ -27,7 +27,7 @@ export interface ModifiedArtifactResult {
 export async function applyConversationalRevision(
   options: ModifyArtifactOptions
 ): Promise<ModifiedArtifactResult> {
-  const profile = getCachedProfile();
+  const profile = await getProfile();
   const { artifactType, currentContent, userInstruction, jobContext } = options;
 
   const educationSummary = (profile.education || [])

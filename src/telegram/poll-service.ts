@@ -5,6 +5,7 @@
  */
 
 import { getEnv } from '../config/env.js';
+import { getProfile } from '../profile/profile-loader.js';
 import {
   handleTelegramCallback,
   handleTelegramMessage,
@@ -17,6 +18,7 @@ let isPolling = false;
  * Starts continuous long-polling for Telegram Bot callback queries and messages.
  */
 export async function startTelegramPolling(): Promise<void> {
+  await getProfile();
   const env = getEnv();
   const token = env.TELEGRAM_BOT_TOKEN;
   isPolling = true;

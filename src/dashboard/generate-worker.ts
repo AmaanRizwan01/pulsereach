@@ -17,6 +17,7 @@ import { google } from 'googleapis';
 import { Readable } from 'stream';
 import { getEnv } from '../config/env.js';
 import { throttle } from '../rate-limiter/token-bucket.js';
+import { getProfile } from '../profile/profile-loader.js';
 
 /** Parsed inputs for the dashboard worker. */
 interface DashboardWorkerArgs {
@@ -159,6 +160,7 @@ async function uploadResultsJsonToDrive(
 async function runDashboardGeneration(): Promise<void> {
   const { jobId, jobTitle, companyName, jobDescription } = parseWorkerInputs();
   const startTime = Date.now();
+  await getProfile();
 
   console.log(`\n⚡ [Dashboard Worker] Starting generation for job: "${jobId}"`);
   console.log(`   Title: ${jobTitle}`);

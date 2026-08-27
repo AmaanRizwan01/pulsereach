@@ -5,8 +5,10 @@
 
 import type { VercelRequest, VercelResponse } from '@vercel/node';
 import { handleTelegramCallback, handleTelegramMessage } from '../src/telegram/bot-service.js';
+import { getProfile } from '../src/profile/profile-loader.js';
 
 export default async function handler(req: VercelRequest, res: VercelResponse) {
+  await getProfile();
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed. Use POST.' });
   }

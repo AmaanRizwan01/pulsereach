@@ -5,7 +5,7 @@
 
 import { generateStructuredJson } from './index.js';
 import { CandidateMasterProfile, VerifiedProject, VerifiedExperience } from '../profile/types.js';
-import { getCachedProfile } from '../profile/profile-loader.js';
+import { getProfile, getCachedProfile } from '../profile/profile-loader.js';
 import { ResumeData } from './resume-compiler.js';
 import { evaluateResumeAtsScore, AtsEvaluationResult } from './ats-evaluator.js';
 
@@ -115,7 +115,7 @@ export async function tailorResume(options: TailorResumeOptions): Promise<Tailor
     minAtsScoreThreshold = 85,
   } = options;
 
-  const activeProfile = getCachedProfile();
+  const activeProfile = await getProfile();
   const catalog: CandidateMasterProfile = options.candidateProfile
     ? { ...activeProfile, ...options.candidateProfile }
     : activeProfile;

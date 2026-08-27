@@ -4,7 +4,7 @@
  */
 
 import { generateStructuredJson, sanitizeEmDashes } from './index.js';
-import { getCachedProfile } from '../profile/profile-loader.js';
+import { getProfile, getCachedProfile } from '../profile/profile-loader.js';
 import { buildOutreachEmailPrompt } from '../prompts/index.js';
 
 export interface TailoredEmailResult {
@@ -121,7 +121,7 @@ export interface GenerateOutreachEmailOptions {
 export async function generateTailoredOutreachEmail(
   options: GenerateOutreachEmailOptions
 ): Promise<TailoredEmailResult> {
-  const profile = getCachedProfile();
+  const profile = await getProfile();
   const candidateName = options.candidateName || profile.name;
   const candidateLocation = options.candidateLocation || profile.visaStatus;
 
@@ -218,7 +218,7 @@ export interface GenerateLinkedInPitchOptions {
 export async function generateLinkedInRecruiterPitch(
   options: GenerateLinkedInPitchOptions
 ): Promise<LinkedInPitchResult> {
-  const profile = getCachedProfile();
+  const profile = await getProfile();
   const candidateName = profile.name;
   const { jobTitle, companyName, recruiterName, contactType, matchedSkills = [], outreachStrategy = '' } = options;
 

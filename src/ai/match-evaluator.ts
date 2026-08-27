@@ -4,7 +4,7 @@
  */
 
 import { generateStructuredJson, sanitizeEmDashes } from './index.js';
-import { getCachedProfile } from '../profile/profile-loader.js';
+import { getProfile, getCachedProfile } from '../profile/profile-loader.js';
 import { getAllSkills } from './candidate-data.js';
 
 export interface EvaluateMatchOptions {
@@ -29,7 +29,7 @@ export interface MatchEvaluationResult {
 export async function evaluateJobMatch(
   options: EvaluateMatchOptions
 ): Promise<MatchEvaluationResult> {
-  const profile = getCachedProfile();
+  const profile = await getProfile();
   const allSkills = getAllSkills();
   const { jobTitle, companyName, jobDescription, minScoreThreshold = 65 } = options;
 

@@ -108,6 +108,7 @@ export async function getProfile(forceRefresh: boolean = false): Promise<Candida
         const rows = (await response.json()) as any[];
         if (rows && rows.length > 0) {
           cachedProfile = mapDbRowToProfile(rows[0]);
+          console.log(`[ProfileLoader] ✅ Loaded live candidate profile for "${cachedProfile.name}" (${cachedProfile.email}) from Supabase.`);
           return cachedProfile;
         }
       } else {
@@ -119,7 +120,8 @@ export async function getProfile(forceRefresh: boolean = false): Promise<Candida
   }
 
   // Fallback to sync local loader
-  return getCachedProfile();
+  const localProfile = getCachedProfile();
+  return localProfile;
 }
 
 /**

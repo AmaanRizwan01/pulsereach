@@ -20,7 +20,13 @@ export interface GenerateJsonOptions {
   temperature?: number;
 }
 
-const FALLBACK_MODELS = ['gemini-3.5-flash-lite', 'gemini-3.6-flash', 'gemini-3.5-flash'];
+const FALLBACK_MODELS = [
+  'gemini-3.6-flash',
+  'gemini-3.7-flash',
+  'gemini-3.5-flash',
+  'gemini-3.5-flash-lite',
+  'gemini-2.5-flash',
+];
 
 /**
  * Recursively strips em-dashes (—, –, --) from strings within objects and arrays.

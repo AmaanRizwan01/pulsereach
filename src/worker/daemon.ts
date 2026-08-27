@@ -6,12 +6,14 @@
  */
 
 import { startTelegramPolling, stopTelegramPolling } from '../telegram/poll-service.js';
+import { getProfile } from '../profile/profile-loader.js';
 
 /**
  * Starts the manual on-demand cockpit.
  * Launches Telegram long-polling so button taps and /next commands are processed in real-time.
  */
 export async function startManualCockpit(): Promise<void> {
+  await getProfile();
   console.log(`\n🤖 =========================================================`);
   console.log(`🎮 PULSEREACH MANUAL ON-DEMAND COCKPIT STARTED`);
   console.log(`📱 Commands: /next, /status, /reset, /help`);
